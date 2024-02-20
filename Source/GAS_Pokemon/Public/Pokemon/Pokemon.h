@@ -20,8 +20,8 @@ public:
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 	virtual FGameplayTagContainer& GetTags() override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag GameplayTypes;
-
+	//FGameplayTag GameplayTypes;
+	FGameplayTagContainer GameplayTypes;
 	float HP;
 
 	void ApplyDamage(float Damage) { HP -= Damage;}

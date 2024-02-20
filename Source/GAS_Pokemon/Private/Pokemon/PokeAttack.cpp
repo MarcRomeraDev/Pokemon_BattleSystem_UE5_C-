@@ -9,22 +9,26 @@
 void UPokeAttack::Attack(APokemon* Instigator, APokemon* Receiver)
 {
 	float Damage = BaseDamage;
-	if(PokeTypeCorrelation)
+	if (PokeTypeCorrelation)
 	{
 		TArray<FPokeCorrelations*> OutRows;
-		PokeTypeCorrelation->GetAllRows<FPokeCorrelations>(TEXT("Attack"),OutRows);
+		PokeTypeCorrelation->GetAllRows<FPokeCorrelations>(TEXT("Attack"), OutRows);
 
+		// find the row of the movement type
 		FPokeCorrelations** Row = OutRows.FindByPredicate([this](FPokeCorrelations* Corr)
 		{
 			return Corr->TypeAttack.MatchesTag(Type);
 		});
-		FTypeMultiplierPair* TypePair= (*Row)->Type_Coeff.FindByPredicate([Receiver](const FTypeMultiplierPair& InTypePair)
+
+		// For each type of the enemy pokemon, apply the dmg multiplier depending on the movement type
+		for (TArray<TArray<FTypeMultiplierPair>::ElementType> TypePairs =
+			     (*Row)->Type_Coeff.FilterByPredicate(
+				     [Receiver](const FTypeMultiplierPair& InTypePair)
+				     {
+					     return Receiver->GameplayTypes.HasTag(InTypePair.Type);
+				     }); const auto [Type, Multiplier] : TypePairs)
 		{
-			return Receiver->GameplayTypes.MatchesTag(InTypePair.Type);
-		});
-		if(TypePair)
-		{
-			Damage *= TypePair->Multiplier;
+			Damage *= Multiplier;
 		}
 	}
 	Receiver->ApplyDamage(Damage);
