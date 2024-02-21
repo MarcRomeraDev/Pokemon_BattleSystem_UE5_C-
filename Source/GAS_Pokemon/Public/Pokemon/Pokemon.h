@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameplayTagContainer.h"
+#include "PokeAttack.h"
 #include "Tags/ExtendedGameplayTagInterface.h"
 #include "Pokemon.generated.h"
 
@@ -23,13 +24,14 @@ public:
 	//FGameplayTag GameplayTypes;
 	FGameplayTagContainer GameplayTypes;
 	float HP;
-
 	void ApplyDamage(float Damage) { HP -= Damage;}
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+    TArray<UPokeAttack> Movements;
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void AddMovement(UPokeAttack* Movement);
 };

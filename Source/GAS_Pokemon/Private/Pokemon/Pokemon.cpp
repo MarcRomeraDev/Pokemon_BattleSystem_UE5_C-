@@ -5,7 +5,7 @@
 
 
 // Sets default values
-APokemon::APokemon()
+APokemon::APokemon(): HP(10)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -32,5 +32,9 @@ FGameplayTagContainer& APokemon::GetTags()
 void APokemon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void APokemon::AddMovement(UPokeAttack* Movement)
+{
 }
 
